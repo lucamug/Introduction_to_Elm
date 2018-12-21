@@ -1,0 +1,22 @@
+{
+    "name": "Introduction_to_Elm_by_Luca_Mugnaini",
+    "version": "1.0.0",
+    "description": "Note for the presentation of Dec 20th, 2018 in Rakuten",
+    "main": "index.js",
+    "dependencies": {},
+    "devDependencies": {
+        "elm": "^0.19.0-bugfix2",
+        "elm-format": "^0.8.1",
+        "elm-live": "^3.4.0"
+    },
+    "scripts": {
+        "start": "node_modules/.bin/elm reactor"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://lucamug@bitbucket.org/lucamug/elm-talk-dec-2018.git"
+    },
+    "author": "lucamug@gmail.com",
+    "license": "ISC",
+    "homepage": "https://bitbucket.org/lucamug/elm-talk-dec-2018#readme"
+}
