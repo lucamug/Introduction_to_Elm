@@ -27,6 +27,7 @@ dataFromDB =
     [ { name = "one", price = Nothing }
     , { name = "two", price = Just 0 }
     , { name = "three", price = Just 545354 }
+    , { name = "two", price = Just 0 }
     ]
 
 
@@ -47,7 +48,7 @@ type alias Model =
 
 init : Flags -> ( Model, Cmd Msg )
 init _ =
-    ( { count = 0
+    ( { count = 10
       , width = 0
       , dataFromDB = Just dataFromDB
       }
@@ -62,6 +63,7 @@ init _ =
 type Msg
     = Increment
     | Decrement
+    | DeleteItem String
     | OnResize Int Int
 
 
@@ -72,20 +74,51 @@ update msg model =
             ( { model | count = model.count + 1 }, Cmd.none )
 
         Decrement ->
-            ( { model | count = model.count + 1 }, Cmd.none )
+            ( { model | count = model.count - 1 }, Cmd.none )
 
-        OnResize x y ->
+        OnResize x _ ->
             ( { model | width = x }, Cmd.none )
+
+        DeleteItem itemName ->
+            let
+                items =
+                    case model.dataFromDB of
+                        Nothing ->
+                            []
+
+                        Just items_ ->
+                            items_
+
+                newItems =
+                    -- TODO
+                    List.filter (\item -> item.name /= itemName) items
+            in
+            ( { model | dataFromDB = Just newItems }, Cmd.none )
 
 
 
 -- VIEW
 
 
+blue : Color
+blue =
+    rgb 0.1 0.6 1
+
+
+red : Color
+red =
+    rgb 0.8 0.2 0.2
+
+
+buttonColor : Color
+buttonColor =
+    red
+
+
 buttonAttributes : List (Attr () msg)
 buttonAttributes =
-    [ Background.color <| rgb 0.8 0.6 1
-    , Border.rounded 20
+    [ Background.color <| buttonColor
+    , Border.rounded 5
     , padding 10
     , width <| px 100
     , Font.center
@@ -94,8 +127,8 @@ buttonAttributes =
 
 view : Model -> Html Msg
 view model =
-    layout [ width fill, height fill ] <|
-        column [ explain Debug.todo, spacing 20 ]
+    layout [ width fill, height fill, padding 10 ] <|
+        column [ spacing 20 ]
             [ text "List of Items"
             , column [ spacing 10 ] <|
                 case model.dataFromDB of
@@ -108,10 +141,13 @@ view model =
                         -- a = Item
                         --
                         -- (a -> b) = (Item -> Element msg)
-                        List.map
-                            (\item ->
+                        List.indexedMap
+                            (\index item ->
                                 row [ spacing 10 ]
-                                    [ text item.name
+                                    [ text <| String.fromInt (index + 1)
+                                    , Input.button buttonAttributes
+                                        { onPress = Just (DeleteItem item.name), label = text "Delete" }
+                                    , text item.name
                                     , text <|
                                         case item.price of
                                             Nothing ->
@@ -122,7 +158,7 @@ view model =
                                     ]
                             )
                             listOfItem
-            , (if model.width < 400 then
+            , (if model.width < 500 then
                 column
 
                else
