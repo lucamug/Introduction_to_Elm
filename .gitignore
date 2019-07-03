@@ -1,3 +1,10 @@
+# Distribution
+/build/
+/temp/
+
+# Compiled files
+js-compiled
+
 # Dependency directories
 elm-stuff
 node_modules
@@ -6,3 +13,4 @@ node_modules
 .DS_Store
 
 /index.html
+ElmjutsuDum*
