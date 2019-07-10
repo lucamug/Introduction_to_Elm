@@ -15,7 +15,7 @@ import Time
 
 attrs : List (Attribute msg)
 attrs =
-    [ Border.width 1, padding 5, width <| px 100 ]
+    [ Border.width 1, padding 5, width <| px 50 ]
 
 
 counterComponent : msg -> msg -> Int -> Element msg

@@ -1,4 +1,11 @@
-module Main exposing (main)
+module SuperCounter exposing
+    ( Model
+    , Msg(..)
+    , init
+    , main
+    , update
+    , view
+    )
 
 -- 040_TYPE_SIGNATURE
 
@@ -10,7 +17,6 @@ import Element.Border as Border
 import Element.Input as Input
 import Html exposing (Html)
 import Html.Events exposing (onClick)
-import SuperCounter
 import Task
 import Time
 
@@ -22,7 +28,6 @@ import Time
 type alias Model =
     { counters : List Int
     , time : Maybe Time.Posix
-    , componentModel : SuperCounter.Model
     }
 
 
@@ -32,21 +37,13 @@ type alias Model =
 
 
 init : () -> ( Model, Cmd Msg )
-init flags =
-    let
-        ( componentModel, componentCmd ) =
-            SuperCounter.init flags
-    in
+init _ =
     ( { counters = [ 0, -1000, 100, 200 ]
       , time = Nothing
-      , componentModel = componentModel
       }
       -- Task.perform : (Time.Posix -> msg) -> Task Never Time.Posix -> Cmd msg
       -- Time.now : Task x Time.Posix
-    , Cmd.batch
-        [ Task.perform TimeNow Time.now
-        , componentCmd
-        ]
+    , Task.perform TimeNow Time.now
     )
 
 
@@ -59,7 +56,6 @@ type Msg
     | Decrement Int
     | TimeNow Time.Posix
     | DoNothing
-    | ComponentMsg SuperComponent.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
@@ -100,21 +96,16 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    Html.div []
-        [ layout [] <|
-            row [ spacing 20 ] <|
-                List.indexedMap
-                    (\id count ->
-                        Counter.counterComponent (Increment id) (Decrement id) count
-                    )
-                    model.counters
-        , SuperCounter.view model
-        ]
+    layout [] <|
+        row [ spacing 20 ] <|
+            List.indexedMap
+                (\id count ->
+                    Counter.counterComponent (Increment id) (Decrement id) count
+                )
+                model.counters
 
 
 
--- [ counterComponent (Increment 0) (Decrement 0) 0 model
--- ]
 -- MAIN
 
 
