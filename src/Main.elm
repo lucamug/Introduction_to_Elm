@@ -31,7 +31,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { counters = [ 0, -1000 ]
+    ( { counters = [ 0, -1000, 10, 20, 30 ]
       , time = Nothing
       }
       -- Task.perform : (Time.Posix -> msg) -> Task Never Time.Posix -> Cmd msg
@@ -44,10 +44,24 @@ init _ =
 -- UPDATE
 
 
+type alias CounterId =
+    Int
+
+
 type Msg
-    = Increment Int
-    | Decrement Int
+    = Increment CounterId
+    | Decrement CounterId
+    | Reset CounterId
+    | Remove CounterId
     | TimeNow Time.Posix
+
+
+removeElement : Int -> List a -> List a
+removeElement id list =
+    list
+        |> List.indexedMap (\index counter -> ( index, counter ))
+        |> List.filter (\( index, counter ) -> id /= index)
+        |> List.map (\( _, counter ) -> counter)
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
@@ -55,6 +69,19 @@ update msg model =
     case msg of
         TimeNow time ->
             ( { model | time = Just time }, Cmd.none )
+
+        Reset id ->
+            let
+                array =
+                    Array.fromList model.counters
+
+                newArray =
+                    Array.set id 0 array
+            in
+            ( { model | counters = Array.toList newArray }, Cmd.none )
+
+        Remove id ->
+            ( { model | counters = removeElement id model.counters }, Cmd.none )
 
         Increment id ->
             let
@@ -86,12 +113,21 @@ update msg model =
 view : Model -> Html Msg
 view model =
     layout [] <|
-        column [ spacing 20 ] <|
-            List.indexedMap
-                (\id count ->
-                    Counter.counterComponent (Increment id) (Decrement id) count
-                )
-                model.counters
+        column []
+            [ Input.button [] { label = text "Add Counter", onPress = Nothing }
+            , row [ spacing 20 ] <|
+                List.indexedMap
+                    (\id count ->
+                        Counter.counterComponent
+                            { count = count
+                            , msgDec = Decrement id
+                            , msgInc = Increment id
+                            , msgRemove = Remove id
+                            , msgReset = Reset id
+                            }
+                    )
+                    model.counters
+            ]
 
 
 
