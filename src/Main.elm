@@ -21,6 +21,7 @@ import Time
 type alias Model =
     { counters : List Int
     , time : Maybe Time.Posix
+    , inputFieldContent : Int
     }
 
 
@@ -33,6 +34,7 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     ( { counters = [ 0, -1000, 10, 20, 30 ]
       , time = Nothing
+      , inputFieldContent = 0
       }
       -- Task.perform : (Time.Posix -> msg) -> Task Never Time.Posix -> Cmd msg
       -- Time.now : Task x Time.Posix
@@ -54,6 +56,7 @@ type Msg
     | Reset CounterId
     | Remove CounterId
     | TimeNow Time.Posix
+    | OnTyping String
 
 
 removeElement : Int -> List a -> List a
@@ -67,6 +70,13 @@ removeElement id list =
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
+        OnTyping text ->
+            if text == "" then
+                ( { model | inputFieldContent = 0 }, Cmd.none )
+
+            else
+                ( { model | inputFieldContent = Maybe.withDefault model.inputFieldContent <| String.toInt text }, Cmd.none )
+
         TimeNow time ->
             ( { model | time = Just time }, Cmd.none )
 
@@ -114,7 +124,18 @@ view : Model -> Html Msg
 view model =
     layout [] <|
         column []
-            [ Input.button [] { label = text "Add Counter", onPress = Nothing }
+            [ Input.text []
+                { label = Input.labelAbove [] <| text "Type something"
+                , onChange = OnTyping
+                , placeholder = Nothing
+                , text =
+                    if model.inputFieldContent == 0 then
+                        ""
+
+                    else
+                        String.fromInt model.inputFieldContent
+                }
+            , Input.button [] { label = text "Add Counter", onPress = Nothing }
             , row [ spacing 20 ] <|
                 List.indexedMap
                     (\id count ->
