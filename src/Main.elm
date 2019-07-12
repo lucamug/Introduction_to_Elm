@@ -20,9 +20,8 @@ import Time
 
 
 type alias Model =
-    { counters : List Int
-    , time : Maybe Time.Posix
-    , componentModel : SuperCounter.Model
+    { componentModel : SuperCounter.Model
+    , componentModel2 : SuperCounter.Model
     }
 
 
@@ -37,15 +36,13 @@ init flags =
         ( componentModel, componentCmd ) =
             SuperCounter.init flags
     in
-    ( { counters = [ 0, -1000, 100, 200 ]
-      , time = Nothing
-      , componentModel = componentModel
+    ( { componentModel = componentModel
+      , componentModel2 = componentModel
       }
       -- Task.perform : (Time.Posix -> msg) -> Task Never Time.Posix -> Cmd msg
       -- Time.now : Task x Time.Posix
     , Cmd.batch
-        [ Task.perform TimeNow Time.now
-        , componentCmd
+        [ Cmd.map MessagesForSuperCounter componentCmd
         ]
     )
 
@@ -55,60 +52,51 @@ init flags =
 
 
 type Msg
-    = Increment Int
-    | Decrement Int
-    | TimeNow Time.Posix
+    = MessagesForSuperCounter SuperCounter.Msg
+    | MessagesForSuperCounter2 SuperCounter.Msg
     | DoNothing
-    | ComponentMsg SuperComponent.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
-    case msg of
+    case msg |> Debug.log "msg" of
         DoNothing ->
-            ( model, Cmd.none )
+            ( { model
+                | componentModel = Tuple.first <| SuperCounter.init ()
+                , componentModel2 = Tuple.first <| SuperCounter.init ()
+              }
+            , Cmd.none
+            )
 
-        TimeNow time ->
-            ( { model | time = Just time }, Cmd.none )
-
-        Increment id ->
+        MessagesForSuperCounter msgForSuperCounter ->
             let
-                array =
-                    Array.fromList model.counters
-
-                presentCount =
-                    Maybe.withDefault 0 <| Array.get id array
-
-                newArray =
-                    Array.set id (presentCount + 1) array
+                ( superCounterModel, superCounterCmd ) =
+                    SuperCounter.update
+                        msgForSuperCounter
+                        model.componentModel
             in
-            ( { model | counters = Array.toList newArray }, Cmd.none )
+            ( { model | componentModel = superCounterModel }, superCounterCmd )
 
-        Decrement id ->
+        MessagesForSuperCounter2 msgForSuperCounter ->
             let
-                array =
-                    Array.fromList model.counters
-
-                presentCount =
-                    Maybe.withDefault 0 <| Array.get id array
-
-                newArray =
-                    Array.set id (presentCount - 1) array
+                ( superCounterModel, superCounterCmd ) =
+                    SuperCounter.update
+                        msgForSuperCounter
+                        model.componentModel2
             in
-            ( { model | counters = Array.toList newArray }, Cmd.none )
+            ( { model | componentModel2 = superCounterModel }, superCounterCmd )
 
 
 view : Model -> Html Msg
 view model =
     Html.div []
         [ layout [] <|
-            row [ spacing 20 ] <|
-                List.indexedMap
-                    (\id count ->
-                        Counter.counterComponent (Increment id) (Decrement id) count
-                    )
-                    model.counters
-        , SuperCounter.view model
+            Input.button []
+                { label = text "button"
+                , onPress = Just DoNothing
+                }
+        , Html.map MessagesForSuperCounter (SuperCounter.view model.componentModel)
+        , Html.map MessagesForSuperCounter2 (SuperCounter.view model.componentModel2)
         ]
 
 
