@@ -1,0 +1,87 @@
+{
+  "count": 21233,
+  "page": 1,
+  "first": 1,
+  "last": 30,
+  "hits": 30,
+  "pageCount": 100,
+  "Products": [{
+    "Product": {
+      "productId": "699bfc97ae228b5da70c13d44bf8f319",
+      "productName": "サントリー 天然水（南アルプス）２Ｌペットボトル",
+      "productNo": "MWM2V",
+      "brandName": "サントリー",
+      "productUrlPC": "https://product.rakuten.co.jp/product/-/699bfc97ae228b5da70c13d44bf8f319/",
+      "productUrlMobile": "http://m.product.rakuten.co.jp/product/699bfc97ae228b5da70c13d44bf8f319/",
+      "affiliateUrl": null,
+      "smallImageUrl": "https://thumbnail.image.rakuten.co.jp/ran/img/1001/0004/901/777/062/702/10010004901777062702_1.jpg?_ex=64x64",
+      "mediumImageUrl": "https://thumbnail.image.rakuten.co.jp/ran/img/1001/0004/901/777/062/702/10010004901777062702_1.jpg?_ex=128x128",
+      "productCaption": "パッケージ：おいしい水が生まれる自然と採水地を訴求したデザイン。中味：硬度３０。雄大な南アルプス、甲斐駒ケ岳のふもとで汲み上げた、すっきりとキレのいい軟水。",
+      "releaseDate": "2003年2月18日",
+      "makerCode": "104901777",
+      "makerName": "サントリーホールディングス",
+      "makerNameKana": "サントリーホールデイングス",
+      "makerNameFormal": "サントリーホールディングス株式会社",
+      "makerPageUrlPC": "https://product.rakuten.co.jp/category/-/201351/104901777/",
+      "makerPageUrlMobile": "http://m.product.rakuten.co.jp/category/201351/104901777/",
+      "itemCount": 80,
+      "salesItemCount": 55,
+      "usedExcludeCount": 80,
+      "usedExcludeSalesItemCount": 55,
+      "maxPrice": 14366,
+      "salesMaxPrice": 14366,
+      "usedExcludeMaxPrice": 14366,
+      "usedExcludeSalesMaxPrice": 14366,
+      "minPrice": 635,
+      "salesMinPrice": 648,
+      "usedExcludeMinPrice": 635,
+      "usedExcludeSalesMinPrice": 648,
+      "averagePrice": 1780,
+      "reviewCount": 280,
+      "reviewAverage": 4.37,
+      "reviewUrlPC": "https://product.rakuten.co.jp/product/-/699bfc97ae228b5da70c13d44bf8f319/review/",
+      "reviewUrlMobile": "http://m.product.rakuten.co.jp/product/699bfc97ae228b5da70c13d44bf8f319/review/",
+      "rank": 0,
+      "rankTargetGenreId": "0",
+      "rankTargetProductCount": 0,
+      "genreId": "201351",
+      "genreName": "水・ミネラルウォーター",
+      "ProductDetails": [{
+        "detail": {
+          "name": "原産国",
+          "value": "日本"
+        }
+      }, {
+        "detail": {
+          "name": "原材料名",
+          "value": "水（鉱水）"
+        }
+      }, {
+        "detail": {
+          "name": "単品（個装）入数",
+          "value": "6"
+        }
+      }, {
+        "detail": {
+          "name": "内容量",
+          "value": "12000ml"
+        }
+      }, {
+        "detail": {
+          "name": "賞味期限",
+          "value": "製造より24ヶ月"
+        }
+      }, {
+        "detail": {
+          "name": "保存時温度帯",
+          "value": "常温"
+        }
+      }, {
+        "detail": {
+          "name": "単品容量",
+          "value": "2000ml"
+        }
+      }]
+    }
+  }]
+}
