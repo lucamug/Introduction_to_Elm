@@ -131,8 +131,7 @@ update msg model =
 
         OnTyping text ->
             ( { model | inputFieldContent = text }
-            , Process.sleep 500
-                |> Task.perform (\_ -> TimePassed text)
+            , Process.sleep 500 |> Task.perform (\_ -> TimePassed text)
             )
 
         TimePassed oldText ->
